@@ -1,10 +1,10 @@
 import React from "react";
-import ToggleableClock from "./components/ToggleableClock";
+import PuzzleClock from "./components/puzzleClock";
 
 function App() {
   return (
     <div className="App">
-      <ToggleableClock />
+      <PuzzleClock />
     </div>
   );
 }

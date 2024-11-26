@@ -36,3 +36,57 @@
     transform: rotate(360deg);
   }
 }
+
+
+.pendulum-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: rgb(227, 196, 155);
+  position: absolute; /* Allows precise placement */
+  top: calc(100% + 18px); /* Positions it just below the clock */
+  left: 50%; /* Centers it horizontally relative to the clock */
+  transform: translateX(-50%); /* Aligns the container's center with the clock's center */
+  height: 100px; /* Adjust based on pendulum length */
+  width: 50px;
+  border: 1px solid black;
+  border-radius: 20px;
+  
+}
+
+.pendulum-rod {
+  width: 2px;
+  height: 100px;
+  background-color: #680e38;
+  position: absolute;
+  margin-left: 1.85px;
+  margin-top: -5px;
+  top: 0;
+  transform-origin: top center;
+  animation: swing 2s ease-in-out infinite;
+}
+
+.pendulum-bob {
+  width: 20px;
+  height: 20px;
+  background-color: #f23838;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100% - 20px); /* Centered relative to rod */
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(-9deg) translateX(-50%);
+  }
+  50% {
+    transform: rotate(9deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(-9deg) translateX(-50%);
+  }
+}
+
+

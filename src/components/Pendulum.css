@@ -1,0 +1,47 @@
+.pendulum-container {
+    position: relative;
+    width: 60px; /* Adjust to your needs */
+    height: 112px; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-right: auto;
+    border-radius: 17px;
+    margin-top: -50px;
+    margin-bottom: 50px;
+  }
+  
+  .pendulum-rod {
+    width: 1px;
+    height: 110px;
+    background-color: #680e38;
+    position: absolute;
+    left: 50%;
+  }
+  
+  .pendulum-bob {
+    z-index: 100;
+    width: 20px;
+    height: 20px;
+    background-color: #f23838;
+    border-radius: 50%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% - 20px); /* Centered relative to rod */
+    animation: bobMovement 2s ease-in-out infinite; /* Apply the bobMovement animation */
+  }
+  
+  /* Keyframes to animate the pendulum's swing */
+  @keyframes swing {
+    0% {
+      transform: rotate(-1deg);
+    }
+    50% {
+      transform: rotate(1deg);
+    }
+    100% {
+      transform: rotate(-1deg);
+    }
+  }

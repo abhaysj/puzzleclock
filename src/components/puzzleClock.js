@@ -13,6 +13,8 @@ const PuzzleClock = () => {
   const [puzzleAnswer, setPuzzleAnswer] = useState(null);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0); // Elapsed time in seconds
+  const [isRunning, setIsRunning] = useState(true); // Stopwatch active status
 
   const [pendulumConfig, setPendulumConfig] = useState({
     showPendulum: false,
@@ -21,19 +23,63 @@ const PuzzleClock = () => {
     bobColor: "#d32f2f",
   });
 
-  const maxPuzzles = 5; // Define maximum puzzles
+  const maxPuzzles = 9; // Define maximum puzzles
 
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    let timer;
+    if (isRunning) {
+      timer = setInterval(() => {
+        setElapsedTime((prevTime) => prevTime + 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isRunning]);
+
   // Generate puzzle
   const generatePuzzle = () => {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
 
+    function reverseString(str) {
+      return str.split("").reverse().join("");
+    }
+
+    function getNextFibonacci(num) {
+      let a = 0,
+        b = 1;
+      while (b <= num) {
+        [a, b] = [b, a + b];
+      }
+      return b; // The first Fibonacci number greater than `num`
+    }
+
+    function isPrime(num) {
+      if (num <= 1) return false;
+      for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) return false;
+      }
+      return true;
+    }
+
     const puzzles = [
+      { question: `Reverse the word "React".`, answer: reverseString("React") },
+      {
+        question: `What is the next Fibonacci number after ${num1}?`,
+        answer: getNextFibonacci(num1),
+      },
+      {
+        question: `Is ${num1} a prime number?`,
+        answer: isPrime(num1) ? "Yes" : "No",
+      },
+      {
+        question: `What is ${num1} raised to the power of ${num2}?`,
+        answer: Math.pow(num1, num2),
+      },
       { question: `${num1} + ${num2}`, answer: num1 + num2 },
       { question: `What is the square root of ${num1 * num1}?`, answer: num1 },
       { question: `${num1} * ${num2}`, answer: num1 * num2 },
@@ -90,8 +136,19 @@ const PuzzleClock = () => {
         setPendulumConfig((prev) => ({ ...prev, rodColor: "#007bff" }));
       else if (puzzleIndex === 4)
         setPendulumConfig((prev) => ({ ...prev, bobColor: "#4caf50" }));
+      else if (puzzleIndex === 5)
+        setPendulumConfig((prev) => ({ ...prev, bobColor: "orange" }));
+      else if (puzzleIndex === 6)
+        setPendulumConfig((prev) => ({ ...prev, rodColor: "red" }));
+      else if (puzzleIndex === 7)
+        setPendulumConfig((prev) => ({ ...prev, containerBg: "greenyellow" }));
+      else if (puzzleIndex === 8)
+        setPendulumConfig((prev) => ({ ...prev, bobColor: "lightblue" }));
 
       setPuzzleIndex((prev) => prev + 1);
+      if (puzzleIndex == maxPuzzles-1) {
+        setIsRunning(false); // Stop the stopwatch
+      }
     }
   };
 
@@ -110,7 +167,9 @@ const PuzzleClock = () => {
     >
       <h1 style={{ marginBottom: "20px", color: "#343a40" }}>Puzzle Clock</h1>
 
-      <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+      <div
+        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
         <div
           style={{
             padding: "20px",
@@ -130,50 +189,49 @@ const PuzzleClock = () => {
               {time.toLocaleTimeString()}
             </h2>
           )}
-        
 
-        {pendulumConfig.showPendulum && (
-          <div
-            className="pendulum-container"
-            style={{
-              backgroundColor: pendulumConfig.containerBg,
-              height: "120px",
-              width: "40px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "20px",
-              marginTop: "-1px",
-              marginRight: "90px",
-              position: "relative",
-              flexDirection: "row"
-            }}
-          >
+          {pendulumConfig.showPendulum && (
             <div
-              className="pendulum-rod"
+              className="pendulum-container"
               style={{
-                backgroundColor: pendulumConfig.rodColor,
-                width: "5px",
-                height: "150px",
-                marginBottom: "20px",
-                marginTop: "0px",
-                marginRight: "5px",
-                marginLeft: "0.5px"
+                backgroundColor: pendulumConfig.containerBg,
+                height: "120px",
+                width: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+                marginTop: "-1px",
+                marginRight: "90px",
+                position: "relative",
+                flexDirection: "row",
               }}
             >
               <div
-                className="pendulum-bob"
+                className="pendulum-rod"
                 style={{
-                  backgroundColor: pendulumConfig.bobColor,
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "50%",
+                  backgroundColor: pendulumConfig.rodColor,
+                  width: "5px",
+                  height: "150px",
+                  marginBottom: "20px",
+                  marginTop: "0px",
+                  marginRight: "5px",
+                  marginLeft: "0.5px",
                 }}
-              />
+              >
+                <div
+                  className="pendulum-bob"
+                  style={{
+                    backgroundColor: pendulumConfig.bobColor,
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
       </div>
 
       <div style={{ marginTop: "20px", textAlign: "center" }}>
@@ -213,15 +271,28 @@ const PuzzleClock = () => {
             padding: "10px 20px",
             margin: "5px",
             backgroundColor:
-              isPuzzleSolved && puzzleIndex < maxPuzzles ? "#28a745" : "#6c757d",
+              isPuzzleSolved && puzzleIndex < maxPuzzles
+                ? "#28a745"
+                : "#6c757d",
             color: "#fff",
             border: "none",
             borderRadius: "5px",
-            cursor: isPuzzleSolved && puzzleIndex < maxPuzzles ? "pointer" : "not-allowed",
+            cursor:
+              isPuzzleSolved && puzzleIndex < maxPuzzles
+                ? "pointer"
+                : "not-allowed",
           }}
         >
           Next
         </button>
+      </div>
+
+      <div style={{ marginTop: "20px" }}>
+        <h3>
+          Stopwatch: {Math.floor(elapsedTime / 60)}:
+          {elapsedTime % 60 < 10 ? "0" : ""}
+          {elapsedTime % 60}
+        </h3>
       </div>
 
       <div style={{ marginTop: "20px" }}>

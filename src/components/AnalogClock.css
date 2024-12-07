@@ -1,0 +1,46 @@
+.clock {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: 5px solid black;
+    border-radius: 50%;
+    margin: 20px auto;
+    background-color: white;
+  }
+  
+  .clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-3px); /* Adjust for visual alignment */
+  }
+  
+  .hand {
+    position: absolute;
+    width: 50%;
+    height: 4px;
+    background: black;
+    top: 50%;
+    transform-origin: 100%;
+    transform: rotate(90deg); /* Default pointing to 3 o'clock */
+    transition: all 0.05s cubic-bezier(0.4, 2.3, 0.3, 1); /* Smooth animation */
+  }
+  
+  .hour-hand {
+    height: 6px;
+    background: black;
+    width: 30%;
+  }
+  
+  .minute-hand {
+    height: 4px;
+    background: black;
+    width: 40%;
+  }
+  
+  .second-hand {
+    height: 2px;
+    background: red;
+    width: 45%;
+  }
+  
